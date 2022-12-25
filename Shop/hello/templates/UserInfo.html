@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+        <title>Страница пользователя</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+
+    {% include "floar.html" %}
+    <br>
+    <div style="display: flex; flex-direction: row;">
+        <div class="panel_user" style="display: flex; flex-direction: column;">
+            <div>Nick :{{user.username}}</div>
+            <div>Mail :{{user.email}}</div>
+            <div>Wallet :{{Wallet}}</div>
+
+            <div>
+                <h3>Пополнить счет</h3>
+
+                {% csrf_token %}
+                <input style="font-size: 20px;" type="text" id="Money_wallet" name="Money" placeholder="Кол-во денег на пополнение" size="30">
+                <input style="font-size: 20px;" type="submit" onclick="enterdata()" value="Вести">
+
+            </div><br><br><br>
+            <div>
+                <a href="{% url 'Basket' %}"><input style="font-size: 20px;" type="submit" value="Посмотреть корзину"></a>
+            </div>
+
+        </div>
+
+        <div style="display: flex; flex-direction: row; flex-wrap:wrap;   ">
+
+            {% for person in Games %}
+            <a href="/game/{{person.id}}" >
+                <div style="display: flex; flex-direction: column; margin-left: 35px;">
+                    <div> <img src="{{person.cover.url}}" width="170px" height="170px"></div>
+                    <div style="color: #210085;">{{person.Name}}</div>
+                </div>
+            </a>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <style>
+        .panel_user {
+            background-color: #D9D9D9;
+        }
+        body{
+            color: #210085;
+            font-size: 30px;}
+    </style>
+    <script>
+        //userID={{user.id}};
+        function enterdata() {
+            var data1 = new FormData()
+            data1.append('userID', {{ user.id }})
+        data1.append('Money', $('#Money_wallet').val())
+
+        var token = '{{ csrf_token }}';
+        //alert('csrf generated');
+
+        $.ajax({
+            type: 'post',
+            url: "{% url 'UserWallet' %}",
+            data: data1,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            headers: { 'X-CSRFToken': token },
+            success: function (data) {
+                //alert(data.foo);
+                window.location.reload (); 
+            }, error: function (errMsg) {
+                alert(errMsg);
+            }
+        })
+        }
+    </script>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+    <title>Поиск</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <meta charset="utf-8" />
+</head>
+
+<body> 
+    {% include "floar.html" %}
+    <div class="Search_main">
+        <div class="Search_game">
+            <div>
+                <br>
+                <div class="Search">
+                    <form name="test" method="post" action="search">
+                        <input style="font-size: 20px;" type="text" placeholder="Название игры" size="40">
+                        <input style="font-size: 20px;" type="submit" value="Искать" src="{% static " img/search.png" %}">
+                    </form>
+                </div>
+            </div><br><br>
+            <div class="Select_game">
+
+                <table border="0" style="width: 100%;">
+                    <tr>
+                        <th>Постер игры </th>
+                        <th>Название</th>
+                        <th>Дата создания</th>
+                        <th>Цена</th>
+                    </tr>
+                   <!-- <tr>
+                        <td> <img src="{% static " img/search.png" %}" width="50px" height="50px"></td>
+                        <td>Название</td>
+                        <td>Дата создания</td>
+                        <td>Цена</td>
+
+                    </tr>-->
+                    {% for person in Games %}
+
+                    <tr>
+
+                        <td><a href="game/{{person.id}}"><img src="{{person.cover.url}}" width="75px" height="75px"></a>
+                        </td>
+                        <td><a href="game/{{person.id}}">{{person.Name}}</a></td>
+                        <td><a href="game/{{person.id}}">{{person.DateCreate}}</a></td>
+                        <td><a href="game/{{person.id}}">{{person.Price}}</a></td>
+
+                    </tr>
+                    <tr style="height: 20px;"></tr>
+                    {% endfor %}
+
+
+                </table>
+            </div>
+        </div>
+        <div class="Tegs_game">
+            <h2>Теги</h2>
+            <ul>
+                <li>Аркада</li>
+                <li>Инди</li>
+                <li>Экшен</li>
+                <li>Песочница</li>
+                <li>Многопользовательская</li>
+                <li>Однопользовательская</li>
+            </ul>
+        </div>
+    </div>
+    <div></div>
+</body>
+
+<style>
+    a {
+        text-decoration: none;
+        color: #210085;
+    }
+    body{font-size: 30px;}
+</style>
+
+</html>

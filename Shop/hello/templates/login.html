@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <title>Логин</title>
+        
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <style>
+        body
+        {
+            font-size: 30px;
+        }
+        a
+        {
+            text-decoration: none;
+
+        }
+    </style>
+    <div style=" display: flex; justify-content: center;">
+
+        <div style=" display: flex; flex-direction:column;">
+        <div>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <p>Логин:<br> <input style="font-size: 30px;" name="Login" /></p>
+                <p>Пароль:<br> <input style="font-size: 30px;" name="Password" /></p>
+                <input style="font-size: 30px;"  type="submit" value="Авторизация" />
+            </form>
+        </div>
+        <br>
+        <div>
+            <a href="/registration">Регистрация</a><br>
+            <a href="/swap_password">Смена пароля</a>
+        </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

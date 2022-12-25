@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <style>
+        body
+        {
+            font-size: 30px;
+        }
+        a
+        {
+            text-decoration: none;
+            
+        }
+    </style>
+    <br>
+
+    <a  href="/login"><button style="font-size: 30px;">Назад</button></a>
+
+    <div style="display: flex; justify-content: center;">
+    
+        <form method="POST" action="">
+        {% csrf_token %}
+        <p>Ник:<br> <input style="font-size: 30px;" name="Nic" /></p>
+        <p>Почта:<br> <input style="font-size: 30px;" name="Mail" /></p>
+        <p>Пароль:<br> <input style="font-size: 30px;" name="Password"/></p>
+        <p>Павтор пароля:<br> <input style="font-size: 30px;" name="Password_again"/></p>
+        <input style="font-size: 30px;"  type="submit" value="Регистрация" />
+    </form>
+    <div>
+
+</body>
+</html>

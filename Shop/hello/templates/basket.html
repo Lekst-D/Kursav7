@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+        <title>Страница пользователя</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="utf-8" />
+</head>
+<style>
+    body{
+            color: #210085;
+            font-size: 30px;}
+</style>
+<body>
+
+    {% include "floar.html" %}
+    <br>
+    <div style="display: flex;
+    flex-direction:row;   ">
+        <div class="block_pay">
+            <table border="0">
+                {% for person in games %}
+                <tr onclick="show({{person.id}})" style="background-color: #949292;">
+                    <td><img src="{{person.cover.url}}" width="50px" height="50px"></td>
+                    <td>{{person.Name}}</td>
+                    <td>{{person.DateCreate}}</td>
+                    <td>{{person.Price}}</td>
+
+                </tr>
+                <tr>
+                    <td colspan="4"><input name="checkbox" type="checkbox" value="{{person.id}}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div style="background-color:rgb(128, 128, 128) ; width: 100%;">
+            <table border="1">
+                <tr>
+                    <th colspan="3">
+                        <div class="table_game">
+                            <img class="ImageGame" src="{{img.url}}">
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+
+                    <td class="NameGameInfo ddd">Название игры : </td>
+                    <td class="DateCreateGame">Дата выхода: </td>
+                    <td class="CreaterGame">Создатель: </td>
+
+                </tr>
+                <tr>
+                    <td class="DescriptionGame" colspan="3">Описание:{{Description}}</td>
+
+                </tr>
+
+
+            </table>
+        </div>
+    </div>
+    <div class="Slider">
+        <form name="test" >
+            {% csrf_token %}
+            <input style="font-size: 20px;" id="NameSell" name="Price" type="text" placeholder="Цена приложения" value="" size="40">
+            <input style="font-size: 20px;" onclick="SendPay()" type="button" value="Купить">
+        </form>
+    </div>
+    <script>
+        var checkbox = document.querySelectorAll("input[name=checkbox]");
+        var arr = new Array();
+        var price_all = 0;
+        checkbox.forEach((element) => {
+            element.addEventListener('change', function () {
+                //alert(element.value);
+                //alert(("465 pуб.".split(' '))[0]);
+                if (this.checked) {
+                    console.log("Checkbox is checked..");
+
+                    var data1 = new FormData()
+                    data1.append('GameID', element.value)
+                    var token = '{{ csrf_token }}';
+                    $.ajax({
+                        type: 'post',
+                        url: "{% url 'GameInfoGet' %}",
+                        data: data1,
+                        processData: false,
+                        contentType: false,
+                        headers: { 'X-CSRFToken': token },
+                        success: function (result) {
+                            arr.push(result.IDGame);
+                            //alert(arr[arr.length-1]);
+                            price_all += parseInt(result.GamePrice);
+                            //alert(price_all);
+                            money = document.querySelectorAll("#NameSell")[0];
+                            money.value = price_all;
+                        }
+                    })
+
+
+                } else {
+                    console.log("Checkbox is not checked..");
+                }
+            });
+        })
+
+        function PayGames() {
+            arr.forEach((item) => {
+            var data1 = new FormData()
+            data1.append('ID_Game',  item)
+            var token = '{{ csrf_token }}';
+            $.ajax({
+                type: 'post',
+                url: "{% url 'PayGameUser' %}",
+                data: data1,
+                processData: false,
+                contentType: false,
+                headers: { 'X-CSRFToken': token },
+                success: function (result) {
+                    window.location.reload (); 
+                    alert( result.check);
+                },
+                error:function(result){
+                    alert("2112");
+                    alert(result);
+                }
+                
+            })})
+        }
+
+        function SendPay() {
+            var data1 = new FormData()
+            data1.append('Money',  $('#NameSell').val())
+            var token = '{{ csrf_token }}';
+            $.ajax({
+                type: 'post',
+                url: "{% url 'GamePayCheck' %}",
+                data: data1,
+                processData: false,
+                contentType: false,
+                headers: { 'X-CSRFToken': token },
+                success: function (result) {
+                    if(result.check=="Yes"){
+                    PayGames()}
+                    else{alert("у вас не хватает средств для оплаты приложения")}
+
+                }
+            })
+        }
+
+
+        function show(id) {
+            var data1 = new FormData()
+            data1.append('GameID', id)
+            var token = '{{ csrf_token }}';
+            $.ajax({
+                type: 'post',
+                url: "{% url 'GameInfoGet' %}",
+                data: data1,
+                processData: false,
+                contentType: false,
+                headers: { 'X-CSRFToken': token },
+                success: function (result) {
+                    im = document.querySelector(".ImageGame");
+                    im.src = result.ImageGame;
+
+                    v = document.querySelector(".NameGameInfo");
+                    v.innerHTML += result.NameGame;
+
+
+                    date = document.querySelector(".DateCreateGame");
+                    date.innerHTML += result.DateCreateGame;
+                    creater = document.querySelector(".CreaterGame");
+                    creater.innerHTML += result.CreaterGame;
+                    description = document.querySelector(".DescriptionGame");
+                    description.innerHTML = result.DescriptionGame;
+
+                }
+            })
+        }
+    </script>
+
+</html>

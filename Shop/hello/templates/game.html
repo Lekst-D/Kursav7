@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+        <title>Игра {{Game_name}}</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+        
+    <meta charset="utf-8" />
+</head>
+
+<body>
+
+    {% include "floar.html" %}
+
+    <div class="InfoGame">
+
+        <table border="1">
+            <tr>
+                <th colspan="3">
+                    <div class="table_game">
+                        <img src="{{img.url}}">
+
+                        <div class="Slider">
+                            <form name="test" method="post" action="/Basket/{{Game_ID}}/">
+                                {% csrf_token %}
+                                <input style="font-size: 20px;" type="text" placeholder="Цена игры" value="{{GamePrice}} " size="40">
+                                <input style="font-size: 20px;" type="submit" value="Купить">
+                            </form>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+
+                <td><strong>Название игры : {{Game_name}} </strong></td>
+                <td>Дата выхода: {{DateEnter}}</td>
+                <td>Создатель: {{Creater}} </td>
+
+            </tr>
+            <tr>
+                <td colspan="3">Описание:{{Description}}</td>
+
+            </tr>
+
+
+        </table>
+
+
+        <br>
+    </div>
+
+    <div></div>
+</body>
+<style>
+    img {
+        width: 55%;
+        height: 45%;
+    }
+    .table_game{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items:center;
+    }
+    body{font-size: 30px;}
+</style>
+
+</html>

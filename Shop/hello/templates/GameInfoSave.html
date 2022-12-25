@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Сохранение информации об игре</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body>
+
+       <!-- {% for person in game %}
+        <h3>person.Name</h3>
+        
+        <div class="page"><img src="{{person.cover.url}}" alt="connect" style="max-height:300px"><br>
+        {% endfor %}
+-->
+
+    <div class="container-fluid">
+        <div class="col-md-4">
+            <form id="data">
+                <label for="docc">
+                    Name:  <input style="font-size: 20px;" type="text" id="Name" name="Name" ><br><br>
+                    Creater: <input style="font-size: 20px;" type="text" id="Creater" name="Creater" ><br><br>
+                    DateCreate: <input style="font-size: 20px;" type="text" id="DateCreate" name="DateCreate" ><br><br>
+                    Price: <input style="font-size: 20px;" type="text" id="Price" name="Price" ><br><br>
+                    Description: <input style="font-size: 20px;" type="text" id="Description" name="Description" ><br><br>
+                    <input style="font-size: 20px;" type="file" id="doc" name="docu" multiple="multiple"><br><br>
+                </label>
+
+                <button style="font-size: 20px;" type="button" onclick="enterdata()">Submit</button><br><br>
+
+            </form>
+        </div>
+    </div>
+    <style>
+        body{
+                color: #210085;
+                font-size: 30px;}
+    </style>
+    <script>
+        function enterdata() {
+            let f=$('#doc')[0].files.length;
+            //alert(f);
+            for(let i = 0; i<(f); i++){
+            var data1 = new FormData()
+            data1.append('Name', $('#Name').val())
+            data1.append('DateCreate', $('#DateCreate').val())
+            data1.append('Price', $('#Price').val())
+            data1.append('Creater', $('#Creater').val())
+            data1.append('Description', $('#Description').val())
+            data1.append('file', $('#doc')[0].files[i])
+
+            /*let fi = $('#doc')[0].files[0];
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                let img = document.getElementsByClassName("im")[0];
+                //img.src = reader.result;
+            });
+            reader.readAsDataURL(fi);*/
+
+
+            var token = '{{ csrf_token }}';
+            //alert('csrf generated');
+
+            $.ajax({
+                type: 'post',
+                url: '',
+                data: data1,
+                processData: false,
+                contentType: false,
+                headers: { 'X-CSRFToken': token },
+                success: function () {
+                    alert("Added");
+                }
+            })}
+
+        }
+    </script>
+
+</body>
+</html>

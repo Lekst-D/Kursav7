@@ -1,0 +1,47 @@
+<div class="floar">
+    <div class="logo">
+
+        <a href="{% url 'main_page' %}">
+            <div  class="LogoShape">
+                ShopApplic
+            </div>
+        </a>
+
+    </div>
+    <a href="{% url 'main_page' %}">
+        <div style="color: #210085;" class="Shop">
+            Магазин
+        </div>
+    </a>
+    <div style="color: #210085;" class="About">
+        О нас
+    </div>
+    <div class="Search">
+        <form name="test" method="post" action="search">
+            <input style="font-size: 20px;" type="text" placeholder="Название игры" size="40">
+            <input style="font-size: 20px;" type="submit" value="Искать">
+        </form>
+    </div>
+    <div style="display: flex; flex-direction:row; justify-content: center;">
+        {% if user.id != None %}
+        <div style="font-size: 30px; margin-top: 5px; color: #210085;"><a href="{% url 'UserInfo' %}">{{user.username}}</a></div> 
+        <form style="margin-left: 5px;" name="test" method="post" action="/exit">
+            {% csrf_token %}
+            <input style="font-size: 20px;" type="submit" value="Выйти">
+        </form>
+        {% endif %}
+
+        {% if user.id == None %}
+            <a href="{% url 'login' %}">
+                <input style="font-size: 20px;" type="button" value="Войти">
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    a {
+        text-decoration: none;
+        color: black;
+    }
+</style>
